@@ -7,9 +7,14 @@ html, body, #__next {
 }
 
 body {
-  @apply bg-gray-50 text-gray-900;
+  background-color: #f9fafb;
+  color: #111827;
 }
 
 .container {
-  @apply max-w-6xl mx-auto px-4;
+  max-width: 72rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }

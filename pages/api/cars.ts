@@ -15,7 +15,6 @@ let prisma: any = null
 async function getPrisma() {
   if (!prisma) {
     try {
-      // dynamic import may expose PrismaClient as a named export or the default export
       const clientModule: any = await import('@prisma/client')
       const PrismaClientClass = clientModule.PrismaClient || clientModule.default || clientModule.prisma?.PrismaClient
       if (!PrismaClientClass) return null
@@ -28,15 +27,39 @@ async function getPrisma() {
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const { method } = req
+
   try {
     const prismaClient = await getPrisma()
-    if (prismaClient) {
-      const cars = await prismaClient.car.findMany()
-      res.status(200).json(cars)
+
+    if (method === 'GET') {
+      // Fetch all cars
+      if (prismaClient) {
+        const cars = await prismaClient.car.findMany()
+        res.status(200).json(cars)
+      } else {
+        res.status(200).json(fallbackCars)
+      }
+    } else if (method === 'POST') {
+      // Create a new car
+      const { make, model, year, price, description, image } = req.body
+      if (!make || !model || !year || !price) {
+        return res.status(400).json({ error: 'Missing required fields' })
+      }
+      if (prismaClient) {
+        const car = await prismaClient.car.create({
+          data: { make, model, year, price, description, image },
+        })
+        res.status(201).json(car)
+      } else {
+        res.status(500).json({ error: 'Database not available' })
+      }
     } else {
-      res.status(200).json(fallbackCars)
+      res.status(405).json({ error: 'Method not allowed' })
     }
   } catch (error) {
-    res.status(200).json(fallbackCars)
+    console.error('API error:', error)
+    res.status(500).json({ error: 'Internal server error' })
   }
 }
+

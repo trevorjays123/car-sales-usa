@@ -7,6 +7,7 @@ type Car = {
   model: string
   year: number
   price: number
+  image?: string
 }
 
 export default function Listings() {

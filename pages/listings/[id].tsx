@@ -8,6 +8,7 @@ type Car = {
   year: number
   price: number
   description?: string
+  image?: string
 }
 
 export default function CarDetail() {

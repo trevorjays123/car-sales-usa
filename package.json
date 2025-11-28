@@ -13,18 +13,18 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
+    "@prisma/client": "^5.22.0",
     "next": "latest",
     "react": "latest",
-    "react-dom": "latest",
-    "@prisma/client": "latest"
+    "react-dom": "latest"
   },
   "devDependencies": {
+    "@types/node": "latest",
+    "@types/react": "latest",
     "autoprefixer": "latest",
     "postcss": "latest",
+    "prisma": "^5.22.0",
     "tailwindcss": "latest",
-    "typescript": "latest",
-    "@types/react": "latest",
-    "@types/node": "latest",
-    "prisma": "latest"
+    "typescript": "latest"
   }
 }

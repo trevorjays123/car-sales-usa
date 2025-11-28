@@ -15,8 +15,11 @@ let prisma: any = null
 async function getPrisma() {
   if (!prisma) {
     try {
-      const { PrismaClient } = await import('@prisma/client')
-      prisma = new PrismaClient()
+      // dynamic import may expose PrismaClient as a named export or the default export
+      const clientModule: any = await import('@prisma/client')
+      const PrismaClientClass = clientModule.PrismaClient || clientModule.default || clientModule.prisma?.PrismaClient
+      if (!PrismaClientClass) return null
+      prisma = new PrismaClientClass()
     } catch (e) {
       return null
     }
